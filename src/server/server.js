@@ -13,30 +13,21 @@ require("dotenv").config();
 
 
 
-//require soket io section 
-const {Server} =require("socket.io")
 
-const server = http.createServer(app);
-const io=new Server(server,{
-  cors:{
+
+    // Cors
+    const corsOptions = {
       origin: '*',
-      methods:["GET","POST","PUT","DELETE"],
-      credentials:true,            //access-control-allow-credentials:true
+      credentials: true,
+      optionSuccessStatus: 200
+    }
+    app.use(cors(corsOptions))
+    // support json encoded bodies
+    app.use(express.json());
 
-  }
-})
+    app.use(express.urlencoded({ extended: true }));
+    app.set('trust proxy', 1);
 
-app.use(cors({
-  origin: '*',
-  methods:["GET","POST","PUT","DELETE"],
-  credentials:true,            //access-control-allow-credentials:true
-}))
-
-
-// support url encoded bodies{parser use to accept the encoded json come from front }
-app.use(express.urlencoded({ extended: false }));
-// support json encoded bodies
-app.use(express.json());
 
 
 
@@ -58,7 +49,7 @@ app.use(AllPostes_Routes)
 //Connection With The Database
 const database=require("../database/database");
 async function start(PORT){// WHE MUST RUN DATABASE CONNECTION BEFORE LISTEN TO SERVER
-  server.listen(PORT, async() => {
+  app.listen(PORT, async() => {
         try {
             await database.sync();  
             //USE TO SYNC ANY CHANGE CAN HAPPEN  ON DATABASE 
@@ -75,5 +66,5 @@ async function start(PORT){// WHE MUST RUN DATABASE CONNECTION BEFORE LISTEN TO 
 //---------------------------------------export file section---------------------------------------------//
     module.exports ={
     start: start,
-    server:server
+    app:app
 };
