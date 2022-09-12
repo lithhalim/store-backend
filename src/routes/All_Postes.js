@@ -4,7 +4,7 @@ const router = express.Router()
 
 
 const Get_AllPosts=require("../controllers/get-myPostes");
-router.get("/allpostes",Get_AllPosts)
+router.get("/allpostes/:data",Get_AllPosts)
 
 const create_postes=require("../controllers/create_postes");
 router.post("/createpost",create_postes)
